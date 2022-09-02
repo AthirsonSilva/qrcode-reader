@@ -1,10 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from './styles';
+import sendScan from './server';
 
 const App = () => {
+  
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -17,9 +18,22 @@ const App = () => {
     getBarCodeScannerPermissions();
   }, []);
 
+  const sendData = ({ type, data }) => {
+    const qrType = JSON.stringify(type)
+    const qrData = JSON.stringify(data)
+
+    sendScan(qrType, qrData)
+  }
+
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    
+    if(sendData({ type, data })) {
+      alert('Data sent to database!')
+    } else {
+      alert('Error sending data to database!')
+    }
   };
 
   if (hasPermission === null) {
