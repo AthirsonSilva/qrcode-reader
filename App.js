@@ -22,26 +22,38 @@ const App = () => {
   
   const handleJsonPush = ({ type, data }) => {
     json.scans.push({
-      "scan_id": json.scans.length + 1,
-      "type": type,
-      "data": data,
-      "scanned_at": new Date().toLocaleString()
+      scan_id: json.scans.length + 1,
+      type: type,
+      data: data,
+      scanned_at: new Date().toLocaleString()
     });
+  };
+
+  const searchJson = (data) => {
+    for (let i = 0; i < json.scans.length; i++) {
+      if (json.scans[i].scan_data === data) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  const arrayPush = ({ type, data }) => {
+    scans.push(data);
+    json.push(data);
+    alert('QR Code scanned');
+    console.log(scans);
+    console.log(json); 
   };
 
   const sendData = ({ type, data }) => {    
     if (data !== ( null || undefined ) && type !== ( null || undefined )) {
-      if (json.scans.includes(data)) {
+      if (!searchJson(data)) {
         alert('QR Code already scanned');
 
         return
       } else {
-        /* scans.push(data);
-        json.push(data);
-        alert('QR Code scanned');
-        console.log(scans);
-        console.log(json); */
-
         handleJsonPush({ type: type, data: data });
 
         return
