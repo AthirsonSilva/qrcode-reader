@@ -47,7 +47,7 @@ const App = () => {
     console.log(json); 
   };
 
-  const sendData = ({ type, data }) => {    
+  const validateData = ({ type, data }) => {    
     if (data !== ( null || undefined ) && type !== ( null || undefined )) {
       if (!searchJson(data)) {
         alert('QR Code already scanned');
@@ -65,7 +65,7 @@ const App = () => {
     setScanned(true);
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     
-    sendData({ type: type, data: data });
+    validateData({ type: type, data: data });
   };
 
   if (hasPermission === null) {
