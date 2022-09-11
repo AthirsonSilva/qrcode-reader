@@ -6,6 +6,7 @@ import styles from './styles';
 
 const App = () => {
   const scans = Array();
+  const json = require('./scans.json');
   
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -18,21 +19,33 @@ const App = () => {
 
     getBarCodeScannerPermissions();
   }, []);
+  
+  const handleJsonPush = ({ type, data }) => {
+    json.scans.push({
+      "scan_id": json.scans.length + 1,
+      "type": type,
+      "data": data,
+      "scanned_at": new Date().toLocaleString()
+    });
+  };
 
-  const sendData = ({ data }) => {    
-    if (data !== null) {
-      if (scans.includes(data)) {
+  const sendData = ({ type, data }) => {    
+    if (data !== ( null || undefined ) && type !== ( null || undefined )) {
+      if (json.scans.includes(data)) {
         alert('QR Code already scanned');
 
         return
       } else {
-        scans.push(data);
+        /* scans.push(data);
+        json.push(data);
         alert('QR Code scanned');
         console.log(scans);
+        console.log(json); */
+
+        handleJsonPush({ type: type, data: data });
 
         return
       }
-      // console.log(scans.find(scan => scan === qrData))
     } else return false
   }
 
@@ -40,7 +53,7 @@ const App = () => {
     setScanned(true);
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     
-    sendData({ data });
+    sendData({ type: type, data: data });
   };
 
   if (hasPermission === null) {
