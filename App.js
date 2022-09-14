@@ -36,7 +36,20 @@ const App = () => {
     })
     .then(res => alert('Data sent: ' + res.data))
     .catch(err => alert('Server error: ' + err))
-  }
+
+    /* await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        qrType: JSON.stringify({type}),
+        qrData: JSON.stringify({data})
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+      .then(res => alert('Data sent: ' + res.data))
+      .catch(err => alert('Server error: ' + err))
+      }) */
+    }
   
   const handleJsonPush = ({ type, data }) => {
     json.scans.push({
