@@ -5,6 +5,9 @@ const app = express()
 const connection = require('./connection')
 const cors = require('cors')
 
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
 const corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200
@@ -26,7 +29,7 @@ app.post('/api/scans', (req, res) => {
         }
     }) */
 
-    return res.send('Data sent: ' + req.body)
+    return res.send('Data sent: ' + req.body.data)
 })
 
 app.get('/api/scans', (req, res) => {

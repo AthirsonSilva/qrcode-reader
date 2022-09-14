@@ -30,8 +30,8 @@ const App = () => {
       method: 'post',
       url: url,
       data: {
-        qrType: type,
-        qrData: data
+        qrType: JSON.stringify({type}),
+        qrData: JSON.stringify({data})
       }
     })
     .then(res => alert('Data sent: ' + res.data))
