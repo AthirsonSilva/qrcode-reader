@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from './styles';
-// import mssqlConnection from './server/server';
+import axios from 'axios'
 
 const App = () => {
   const scans = Array();
@@ -10,6 +10,9 @@ const App = () => {
   
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [n1, setN1] = useState(0);
+  const [n2, setN2] = useState(0);
+  const [flag, setFlag] = useState(false);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -19,6 +22,25 @@ const App = () => {
 
     getBarCodeScannerPermissions();
   }, []);
+
+  const sendMysql = async ({ type, data }) => {
+    const url = 'http://192.168.18.7:3000/api/scans';
+
+    await axios({
+      method: 'post',
+      url: url,
+      data: {
+        type: type,
+        data: data
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
+    .then(res => alert('Data sent: ' + res.data))
+    .catch(err => alert('Server error: ' + err))
+  }
   
   const handleJsonPush = ({ type, data }) => {
     json.scans.push({
@@ -38,6 +60,37 @@ const App = () => {
       }
     }
   };
+
+  const validateVariables = ({ data }) => {
+    if (data === undefined) {
+      alert('Please enter a value');
+    } else {
+      if (flag) {
+        if (n1 !== data) {
+          setN1(data)
+          setFlag(false);
+          console.log('n1 before: ' + n1);
+          alert('Correct');
+          console.log('n1 after: ' + n1);
+        } else {
+          console.log('n1 already scanned: ' + n1);
+          alert('Incorrect');
+        }
+      } else {
+        if (n2 !== data) {
+          setN2(data)
+          setFlag(true);
+          console.log('n2 before: ' + n2);
+          alert('Correct');
+          console.log('n2 after: ' + n2);
+        } else {
+          console.log('n2 already scanned: ' + n2);
+          alert('Incorrect');
+        }
+      }
+    }
+  }
+  
 
   const arrayPush = ({ type, data }) => {
     scans.push(data);
@@ -63,9 +116,10 @@ const App = () => {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     
-    validateData({ type: type, data: data });
+    sendMysql({ type: type, data: data });
+    console.log(type, data)
   };
 
   if (hasPermission === null) {

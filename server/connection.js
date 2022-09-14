@@ -47,4 +47,7 @@ const mssqlConnection = (err, qrData, qrType) => {
   }, qrData, qrType)
 }
 
-export { mssqlConnection, mysqlConnection }
+module.exports = {
+  mysqlConnection,
+  mssqlConnection
+}
