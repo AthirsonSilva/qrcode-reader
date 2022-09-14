@@ -30,12 +30,8 @@ const App = () => {
       method: 'post',
       url: url,
       data: {
-        type: type,
-        data: data
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        qrType: type,
+        qrData: data
       }
     })
     .then(res => alert('Data sent: ' + res.data))
@@ -116,10 +112,9 @@ const App = () => {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    console.log(`Bar code with type ${type} and data ${data} has been scanned!`);
     
-    sendMysql({ type: type, data: data });
-    console.log(type, data)
+    sendMysql({ type, data });
   };
 
   if (hasPermission === null) {

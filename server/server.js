@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000
 app.use(cors(corsOptions))
 
 app.post('/api/scans', (req, res) => {
-    const type = req.body.type
+    /* const type = req.body.type
     const data = req.body.data
 
     const sql = 'INSERT INTO scans (qrData, qrType) VALUES (?, ?)'
@@ -24,7 +24,9 @@ app.post('/api/scans', (req, res) => {
         } else {
         res.send(result)
         }
-    })
+    }) */
+
+    return res.send('Data sent: ' + req.body)
 })
 
 app.get('/api/scans', (req, res) => {
