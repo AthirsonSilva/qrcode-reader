@@ -1,12 +1,43 @@
-require('dotenv').config()
-
-const express = require('express')
+import * as dotenv from 'dotenv';
+dotenv.config()
+import express, { urlencoded, json } from 'express'
 const app = express()
-const connection = require('./connection')
-const cors = require('cors')
+import cors from 'cors'
+import mysql from 'mysql2/promise'
 
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(urlencoded({ extended: true }))
+app.use(json())
+
+const query = async (data, type) => {
+    if (global.connection && global.connection.state !== 'disconnect') {
+      return global.connection
+    }
+  
+    const connection = await mysql.createConnection(process.env.CONNECTION || 'mysql://root:!Potter4@localhost:3306/scans')
+
+    console.info('MySQL: Connection established')
+    console.table({data, type})
+    global.connection = connection
+    
+    try {
+        console.info('Inserting stuff in the fucking table.')
+        
+        const query = `INSERT INTO scans (qrData, qrType) VALUES (dataTest, typeTest)`
+        connection.query
+    } catch (error) {
+        console.log(error)
+    } finally {
+        selectData()
+    }
+}
+
+
+const selectData = async () => {
+    const conn = await query()
+
+    const [rows] = await conn.query('SELECT * FROM scans')
+    return rows
+}  
 
 const corsOptions = {
     origin: '*',
@@ -17,25 +48,20 @@ const PORT = process.env.PORT || 3000
 app.use(cors(corsOptions))
 
 app.post('/api/scans', (req, res) => {
-    /* const type = req.body.type
-    const data = req.body.data
+    const type = JSON.stringify(req.body.type)
+    const data = JSON.stringify(req.body.data)
+    
+    query({type: type, data: data})
 
-    const sql = 'INSERT INTO scans (qrData, qrType) VALUES (?, ?)'
-    connection.mysqlConnection.query(sql, [type, data], (err, result) => {
-        if (err) {
-        console.log(err)
-        } else {
-        res.send(result)
-        }
-    }) */
-
+    console.table(req.body)
+    
     return res.send('Data sent: ' + req.body.data)
 })
 
 app.get('/api/scans', (req, res) => {
     const query = 'SELECT * FROM scans'
     
-    connection.query(query, (err, result) => {
+    _query(query, (err, result) => {
         if (err) {
         console.log(err)
         } else {

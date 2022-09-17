@@ -24,7 +24,7 @@ const App = () => {
   }, []);
 
   const sendMysql = async ({ type, data }) => {
-    const url = 'http://192.168.18.7:3000/api/scans';
+    const url = `http://192.168.18.7:6969/api/scans`;
 
     await axios({
       method: 'post',
@@ -72,31 +72,17 @@ const App = () => {
 
   const validateVariables = ({ data }) => {
     if (data === undefined) {
-      alert('Please enter a value');
+      alert('Please scan a valida QR code');
     } else {
-      if (flag) {
         if (n1 !== data) {
-          setN1(data)
-          setFlag(false);
+          alert('QR code scanned with success');
           console.log('n1 before: ' + n1);
-          alert('Correct');
+          setN1(data)
           console.log('n1 after: ' + n1);
         } else {
           console.log('n1 already scanned: ' + n1);
-          alert('Incorrect');
+          alert('QR code already scanned, please scan another one');
         }
-      } else {
-        if (n2 !== data) {
-          setN2(data)
-          setFlag(true);
-          console.log('n2 before: ' + n2);
-          alert('Correct');
-          console.log('n2 after: ' + n2);
-        } else {
-          console.log('n2 already scanned: ' + n2);
-          alert('Incorrect');
-        }
-      }
     }
   }
   
@@ -127,7 +113,7 @@ const App = () => {
     setScanned(true);
     console.log(`Bar code with type ${type} and data ${data} has been scanned!`);
     
-    sendMysql({ type, data });
+    sendMysql({ type: type,  data: data });
   };
 
   if (hasPermission === null) {
