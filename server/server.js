@@ -4,14 +4,16 @@ import express, { urlencoded, json } from 'express'
 const app = express()
 import cors from 'cors'
 import mysql from 'mysql2/promise'
+import fs from 'fs'
+import file from '../scans.json'
 
 app.use(urlencoded({ extended: true }))
 app.use(json())
 
 const query = async (data, type) => {
-    if (global.connection && global.connection.state !== 'disconnect') {
+    /* if (global.connection && global.connection.state === 'disconnect') {
       return global.connection
-    }
+    } */
   
     const connection = await mysql.createConnection(process.env.CONNECTION || 'mysql://root:!Potter4@localhost:3306/scans')
 
@@ -22,20 +24,20 @@ const query = async (data, type) => {
     try {
         console.info('Inserting stuff in the fucking table.')
         
-        const query = `INSERT INTO scans (qrData, qrType) VALUES (dataTest, typeTest)`
-        connection.query
+        let query = `INSERT INTO scans (qrData, qrType) VALUES (?, ?)`
+        connection.query((query, ['data', 'type']))
     } catch (error) {
         console.log(error)
     } finally {
-        selectData()
+        connection.end()
     }
 }
 
 
 const selectData = async () => {
-    const conn = await query()
+    const connection = await mysql.createConnection(process.env.CONNECTION || 'mysql://root:!Potter4@localhost:3306/scans')
 
-    const [rows] = await conn.query('SELECT * FROM scans')
+    const [rows] = await connection.query('SELECT * FROM scans')
     return rows
 }  
 
@@ -67,6 +69,17 @@ app.get('/api/scans', (req, res) => {
         } else {
         res.send(result)
         }
+    })
+})
+
+app.post('/api/scans/json', (req, res) => {
+    const fileName = '../scans.json'
+    
+    fs.writeFileSync(fileName, JSON.stringify(file), function writeJSON(err) {
+        if (err) throw err
+
+        console.log(JSON.stringify(file, null, 2))
+        console.log('writing to ' + fileName)
     })
 })
 

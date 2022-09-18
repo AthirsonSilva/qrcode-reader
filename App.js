@@ -36,29 +36,33 @@ const App = () => {
     })
     .then(res => alert('Data sent: ' + res.data))
     .catch(err => alert('Server error: ' + err))
-
-    /* await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-        qrType: JSON.stringify({type}),
-        qrData: JSON.stringify({data})
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-      .then(res => alert('Data sent: ' + res.data))
-      .catch(err => alert('Server error: ' + err))
-      }) */
     }
   
   const handleJsonPush = ({ type, data }) => {
     json.scans.push({
       scan_id: json.scans.length + 1,
-      type: type,
-      data: data,
+      scan_type: type,
+      scan_data: data,
       scanned_at: new Date().toLocaleString()
     });
+
+    // console.table(json.scans, ['scan_id', 'type', 'data', 'scanned_at'])
+    // console.table([['apple', 'banana', 'orange']])
+    json.scans.forEach(scan => console.log(scan.scan_id, scan.scan_type, scan.scan_data, scan.scanned_at))
   };
+
+  function asyncJson({data, type}) {
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:6969/api/scans/json',
+      data: {
+        type: type,
+        data: data
+      }
+    })
+    .then(res => alert('Data sent: ' + res.data))
+    .catch(err => alert('Server error: ' + err))
+  }
 
   const searchJson = (data) => {
     for (let i = 0; i < json.scans.length; i++) {
@@ -80,32 +84,29 @@ const App = () => {
           setN1(data)
           console.log('n1 after: ' + n1);
         } else {
-          console.log('n1 already scanned: ' + n1);
-          alert('QR code already scanned, please scan another one');
+          if (n2 !== data) {
+            alert('QR code scanned with success');
+            console.log('n2 before: ' + n2);
+            setN2(data)
+            console.log('n2 after: ' + n2);
+          } else {
+            alert('QR code already scanned');
+          }
         }
+      console.table({n1, n2});
     }
   }
   
-
-  const arrayPush = ({ type, data }) => {
-    scans.push(data);
-    json.push(data);
-    alert('QR Code scanned');
+  const arrayPush = ({ data }) => {
+    for (let i = 0; i < 5; i++) {
+      scans.push(data)
+    }
     console.log(scans);
-    console.log(json); 
   };
 
   const validateData = ({ type, data }) => {    
     if (data !== ( null || undefined ) && type !== ( null || undefined )) {
-      if (!searchJson(data)) {
-        alert('QR Code already scanned');
-
-        return
-      } else {
-        handleJsonPush({ type: type, data: data });
-
-        return
-      }
+      searchJson(data) ? alert('QR code already scanned') : handleJsonPush({ type, data });
     } else return false
   }
 
@@ -113,7 +114,12 @@ const App = () => {
     setScanned(true);
     console.log(`Bar code with type ${type} and data ${data} has been scanned!`);
     
-    sendMysql({ type: type,  data: data });
+    // sendMysql({ type: type,  data: data });
+    // validateVariables({ data: data });
+    // arrayPush({ data: data });
+    // handleJsonPush({ type: type, data: data });
+    // validateData({ type: type, data: data });
+    asyncJson({ type: type, data: data });
   };
 
   if (hasPermission === null) {

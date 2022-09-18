@@ -2,15 +2,15 @@
     "scans": [
         {
             "scan_id": "1",
-            "scan_data": "http://www.example.com",
+            "scan_data": "http://www.first-example.com",
             "scan_type": 256,
-            "scanned_at": "2019-01-01T00:00:00Z"
+            "scanned_at": "Sat Oct 10 12:00:00 2015"
         },
         {
             "scan_id": "2",
-            "scan_data": "http://www.example.com",
+            "scan_data": "http://www.second-example.com",
             "scan_type": 256,
-            "scanned_at": "2019-01-01T00:00:00Z"
+            "scanned_at": "Sun Jan 01 00:00:00 2019"
         }
     ]
 }

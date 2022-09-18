@@ -70,7 +70,7 @@ const insertData = async (qrData, qrType) => {
 
   const sql = 'INSERT INTO scans (data, type) VALUES (?, ?)'
   const values = [qrData, qrType]
-
+  
   return await conn.query(sql, values)
 }
 
