@@ -20,18 +20,11 @@ class ScanController extends Controller
 
     public function index()
     {
-        //
+        $scans = $this->scan->all();
+
+        return response()->json($scans);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -53,28 +46,6 @@ class ScanController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -86,6 +57,12 @@ class ScanController extends Controller
         $query = $this->scan->where('id', $id)->update([
             'qrData' => $request->qrData,
         ]);
+
+        if ($query) {
+            return response()->success('Data updated successfully');
+        } else {
+            return response()->failed('Data failed to update');
+        }
     }
 
     /**
@@ -97,5 +74,11 @@ class ScanController extends Controller
     public function destroy($id)
     {
         $query = $this->scan->where('id', $id)->delete();
+
+        if ($query) {
+            return response()->success('Data deleted successfully');
+        } else {
+            return response()->failed('Data failed to delete');
+        }
     }
 }
