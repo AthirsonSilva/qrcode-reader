@@ -17,3 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Path: server/routes/web.php
+
+Route::get('/scan', [ScanController::class, 'index'])->name('scan.index');
+
+Route::post('/scan', [ScanController::class, 'store'])->name('scan.store');
+
+Route::put('/scan/{id}', [ScanController::class, 'update'])->name('scan.update');
+
+Route::delete('/scan/{id}', [ScanController::class, 'destroy'])->name('scan.destroy');
+
