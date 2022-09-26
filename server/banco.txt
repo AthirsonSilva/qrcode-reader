@@ -1,0 +1,13 @@
+http://localhost/phpmyadmin/
+
+nome do banco: scans
+
+create table tbscans(
+ id int primary key auto_increment
+,data varchar(50)
+);
+
+
+insert into tbscans (data) 
+values
+    ('http://google.com');
