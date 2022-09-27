@@ -20,7 +20,7 @@ class ScanController extends Controller
 
     public function index()
     {
-        $scans = $this->scan->all();
+        $scans = ScanModel::all();
 
         return response()->json($scans);
     }
@@ -35,7 +35,7 @@ class ScanController extends Controller
     public function store(Request $request)
     {
         $query = $this->scan->create([
-            'qrData' => $request->qrData,
+            'data' => $request->data,
         ]);
 
         if ($query) {
@@ -55,7 +55,7 @@ class ScanController extends Controller
     public function update(Request $request, $id)
     {
         $query = $this->scan->where('id', $id)->update([
-            'qrData' => $request->qrData,
+            'data' => $request->data,
         ]);
 
         if ($query) {

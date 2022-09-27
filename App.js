@@ -4,15 +4,11 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from './styles';
 import axios from 'axios'
 
-const App = () => {
-  const scans = Array();
-  const json = require('./scans.json');
-  
+const App = () => {  
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [n1, setN1] = useState(0);
   const [n2, setN2] = useState(0);
-  const [flag, setFlag] = useState(false);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -23,56 +19,33 @@ const App = () => {
     getBarCodeScannerPermissions();
   }, []);
 
-  const sendMysql = async ({ type, data }) => {
-    const url = `http://192.168.18.7:6969/api/scans`;
-
+  const postScan = async ({ type, data }) => {
     await axios({
       method: 'post',
-      url: url,
+      url: `http://127.0.0.1:8000/api/scan`,
       data: {
-        qrType: JSON.stringify({type}),
-        qrData: JSON.stringify({data})
+        data: JSON.stringify({data})
       }
     })
-    .then(res => alert('Data sent: ' + res.data))
+    .then(response => alert('Data sent: ' + response.data))
     .catch(err => alert('Server error: ' + err))
     }
-  
-  const handleJsonPush = ({ type, data }) => {
-    json.scans.push({
-      scan_id: json.scans.length + 1,
-      scan_type: type,
-      scan_data: data,
-      scanned_at: new Date().toLocaleString()
-    });
 
-    // console.table(json.scans, ['scan_id', 'type', 'data', 'scanned_at'])
-    // console.table([['apple', 'banana', 'orange']])
-    json.scans.forEach(scan => console.log(scan.scan_id, scan.scan_type, scan.scan_data, scan.scanned_at))
-  };
-
-  function asyncJson({data, type}) {
+  function getScans() {
     axios({
-      method: 'post',
-      url: 'http://127.0.0.1:6969/api/scans/json',
-      data: {
-        type: type,
-        data: data
+      method: 'get',
+      url: 'http://127.0.0.1:8000/api/scan',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       }
     })
-    .then(res => alert('Data sent: ' + res.data))
+    .then(response => {
+      console.table(response.data)
+    })
     .catch(err => alert('Server error: ' + err))
   }
 
-  const searchJson = (data) => {
-    for (let i = 0; i < json.scans.length; i++) {
-      if (json.scans[i].scan_data === data) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  };
 
   const validateVariables = ({ data }) => {
     if (data === undefined) {
@@ -97,29 +70,14 @@ const App = () => {
     }
   }
   
-  const arrayPush = ({ data }) => {
-    for (let i = 0; i < 5; i++) {
-      scans.push(data)
-    }
-    console.log(scans);
-  };
-
-  const validateData = ({ type, data }) => {    
-    if (data !== ( null || undefined ) && type !== ( null || undefined )) {
-      searchJson(data) ? alert('QR code already scanned') : handleJsonPush({ type, data });
-    } else return false
-  }
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     console.log(`Bar code with type ${type} and data ${data} has been scanned!`);
     
+    getScans();
     // sendMysql({ type: type,  data: data });
     // validateVariables({ data: data });
-    // arrayPush({ data: data });
-    // handleJsonPush({ type: type, data: data });
-    // validateData({ type: type, data: data });
-    asyncJson({ type: type, data: data });
   };
 
   if (hasPermission === null) {
