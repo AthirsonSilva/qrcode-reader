@@ -16,6 +16,8 @@ const App = () => {
       setHasPermission(status === 'granted');
     };
 
+    getScans()
+    postScan('post teste')
     getBarCodeScannerPermissions();
   }, []);
 
@@ -51,13 +53,13 @@ const App = () => {
     if (data === undefined) {
       alert('Please scan a valida QR code');
     } else {
-        if (n1 !== data) {
+        if (!n1) {
           alert('QR code scanned with success');
           console.log('n1 before: ' + n1);
           setN1(data)
           console.log('n1 after: ' + n1);
         } else {
-          if (n2 !== data) {
+          if (!n2) {
             alert('QR code scanned with success');
             console.log('n2 before: ' + n2);
             setN2(data)
