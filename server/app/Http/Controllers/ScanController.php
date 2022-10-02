@@ -13,8 +13,9 @@ class ScanController extends Controller
      * @return \Illuminate\Http\Response
      */
     private $scan;
-     
-    public function _construct() {
+
+    public function _construct()
+    {
         $this->scan = new ScanModel();
     }
 
@@ -36,11 +37,13 @@ class ScanController extends Controller
     {
         $query = $this->scan->create([
             'data' => $request->data,
+            'type' => $request->type
         ]);
 
         if ($query) {
             return response()->success('Data saved successfully');
-        } else {
+        }
+        else {
             return response()->failed('Data failed to save');
         }
     }
@@ -56,11 +59,13 @@ class ScanController extends Controller
     {
         $query = $this->scan->where('id', $id)->update([
             'data' => $request->data,
+            'type' => $request->type
         ]);
 
         if ($query) {
             return response()->success('Data updated successfully');
-        } else {
+        }
+        else {
             return response()->failed('Data failed to update');
         }
     }
@@ -77,7 +82,8 @@ class ScanController extends Controller
 
         if ($query) {
             return response()->success('Data deleted successfully');
-        } else {
+        }
+        else {
             return response()->failed('Data failed to delete');
         }
     }

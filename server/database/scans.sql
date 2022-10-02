@@ -7,7 +7,7 @@
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
-CREATE DATABASE dbscans;
+CREATE DATABASE scans;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,10 +29,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `tbscans`
 --
 
-CREATE TABLE `tbscan` (
+CREATE TABLE `scans` (
   `ID` int(11) NOT NULL,
   `data` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL
+  `type` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
