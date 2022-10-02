@@ -22,10 +22,19 @@ export default function RestrictedPage() {
         )
         .then((response) => response.json())
         .then((json) => {
-            setData(json.scans)
+            json.scans.forEach((scan: any) => {
+                data.push(scan)
+            })
 
-            console.log('FETCHED DATA')
             console.table(data)
+
+            data.map((scan: any) => {
+                scan.map((item: any) => {
+                    headers.push(item)
+
+                    console.table(item)
+                })
+            })
         })
         .catch((error) => console.error(error))
         .finally(() => setLoading(false));
