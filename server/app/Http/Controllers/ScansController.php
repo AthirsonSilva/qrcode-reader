@@ -23,7 +23,10 @@ class ScansController extends Controller
     {
         $scans = ScanModel::all();
 
-        return response()->json($scans);
+        return response([
+            'scans' => $scans,
+            'message' => 'Retrieved successfully'
+        ], 200);
     }
 
     /**
@@ -88,7 +91,10 @@ class ScansController extends Controller
     {
         $scans = ScanModel::all();
 
-        return response()->json($scans);
+        return response([
+            'scans' => $scans,
+            'message' => 'Retrieved successfully'
+        ], 200);
     }
 
     /**
@@ -105,10 +111,18 @@ class ScansController extends Controller
         ]);
 
         if ($query) {
-            return response()->success('Data updated successfully');
+            return response([
+                'status' => 200,
+                'message' => 'Data updated successfully',
+                'data' => $query . json_encode($request),
+            ]);
         }
         else {
-            return response()->failed('Data failed to update');
+            return response([
+                'status' => 500,
+                'message' => 'Data failed to update',
+                'data' => $query . json_encode($request),
+            ]);
         }
     }
 
@@ -132,10 +146,18 @@ class ScansController extends Controller
         ]);
 
         if ($query) {
-            return response()->success('Data updated successfully');
+            return response([
+                'status' => 200,
+                'message' => 'Data updated successfully',
+                'data' => $query . json_encode($request),
+            ]);
         }
         else {
-            return response()->failed('Data failed to update');
+            return response([
+                'status' => 500,
+                'message' => 'Data failed to update',
+                'data' => $query . json_encode($request),
+            ]);
         }
     }
 
@@ -151,10 +173,18 @@ class ScansController extends Controller
         $query = ScanModel::where('id', $id)->delete();
 
         if ($query) {
-            return response()->success('Data deleted successfully');
+            return response([
+                'status' => 200,
+                'message' => 'Data deleted successfully',
+                'data' => $query,
+            ]);
         }
         else {
-            return response()->failed('Data failed to delete');
+            return response([
+                'status' => 500,
+                'message' => 'Data failed to delete',
+                'data' => $query,
+            ]);
         }
     }
 }
