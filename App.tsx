@@ -14,9 +14,54 @@ export default function App() {
     return (
 		<NavigationContainer>
 			<Stack.Navigator initialRouteName='Home'>
-				<Stack.Screen name="Home" component={HomePage} />
-				<Stack.Screen name="Restric" component={RestrictedPage} />
-				<Stack.Screen name="Scan" component={ScanPage} />
+				<Stack.Screen 
+				name="Home" 
+				component={HomePage}
+				options={{
+					title: 'Home Page',
+                    headerStyle: {
+                      backgroundColor: '#fff',
+                    },
+                    headerTitleStyle: {
+                      fontWeight: 'bold',
+                      fontSize: 26,
+                    },
+                    headerTitleAlign: 'center',
+				}}
+				/>
+				
+				<Stack.Screen 
+				name="Restrict" 
+				component={RestrictedPage}
+				options={{
+					title: 'Área Restrita',
+                    headerStyle: {
+                      backgroundColor: '#fff',
+                    },
+                    headerTitleStyle: {
+                      fontWeight: 'bold',
+                      fontSize: 26,
+                    },
+                    headerTitleAlign: 'center',
+				}}
+				/>
+				
+				<Stack.Screen 
+				name="Scan" 
+				component={ScanPage}
+				options={{
+					title: 'Scanner',
+                    headerStyle: {
+                      backgroundColor: '#fff',
+                    },
+                    headerTitleStyle: {
+                      fontWeight: 'bold',
+                      fontSize: 26,
+                    },
+                    headerTitleAlign: 'center',
+				}}
+				/>
+				
 			</Stack.Navigator>
 		</NavigationContainer>
     );
