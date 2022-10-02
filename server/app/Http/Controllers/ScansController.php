@@ -105,9 +105,9 @@ class ScansController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $query = $this->scans->where('id', $id)->update([
-            'qrData' => $request->data,
-            'qrType' => $request->type
+        $query = ScanModel::where('id', $id)->update([
+            'qrData' => $request->qrData,
+            'qrType' => $request->qrType
         ]);
 
         if ($query) {
@@ -141,8 +141,8 @@ class ScansController extends Controller
         //]);
 
         $query = ScanModel::where('id', $id)->update([
-            'qrData' => $request->data,
-            'qrType' => $request->type
+            'qrData' => $request->qrData,
+            'qrType' => $request->qrType
         ]);
 
         if ($query) {
