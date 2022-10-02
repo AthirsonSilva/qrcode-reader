@@ -27,6 +27,6 @@ Route::post('/scan', [ScansController::class , 'store'])->name('scan.store');
 
 Route::put('/scan/{id}', [ScansController::class , 'update'])->name('scan.update');
 
-Route::patch('/scan/{id}', [ScansController::class , 'edit'])->name('scan.edit');
+Route::patch('/scan/{id}', [ScansController::class , 'update'])->name('scan.update');
 
 Route::delete('/scan/{id}', [ScansController::class , 'destroy'])->name('scan.destroy');

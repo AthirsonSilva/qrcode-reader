@@ -105,6 +105,20 @@ class ScansController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        return response([
+            'message' => 'LOL'
+        ], 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
         $actualData = ScanModel::find($id);
 
         echo $actualData->qrType;
@@ -114,6 +128,12 @@ class ScansController extends Controller
                 $query = ScanModel::where('id', $id)->update([
                     'qrData' => $request->qrData,
                     'qrType' => $actualData->qrType
+                ]);
+
+                return response([
+                    'status' => 200,
+                    'message' => 'Data updated successfully',
+                    'data' => $query . json_encode($request),
                 ]);
             }
             else if ($request->qrType && !$request->qrData) {
@@ -133,15 +153,19 @@ class ScansController extends Controller
                 'qrData' => $request->qrData,
                 'qrType' => $request->qrType
             ]);
+
+            return response([
+                'status' => 200,
+                'message' => 'Data updated successfully',
+                'data' => $query . json_encode($request),
+            ]);
         }
-        else {
+        else if ($request->isMethod('put')) {
             $query = ScanModel::where('id', $id)->update([
                 'qrData' => $request->qrData,
                 'qrType' => $request->qrType
             ]);
-        }
 
-        if ($query) {
             return response([
                 'status' => 200,
                 'message' => 'Data updated successfully',
@@ -151,43 +175,8 @@ class ScansController extends Controller
         else {
             return response([
                 'status' => 500,
-                'message' => 'Data failed to update',
-                'data' => $query . json_encode($request),
-            ]);
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        // $query = $this->scan->where('id', $id)->update([
-        //    'data' => $request->data,
-        //    'type' => $request->type
-        //]);
-
-        $query = ScanModel::where('id', $id)->update([
-            'qrData' => $request->qrData,
-            'qrType' => $request->qrType
-        ]);
-
-        if ($query) {
-            return response([
-                'status' => 200,
-                'message' => 'Data updated successfully',
-                'data' => $query . json_encode($request),
-            ]);
-        }
-        else {
-            return response([
-                'status' => 500,
-                'message' => 'Data failed to update',
-                'data' => $query . json_encode($request),
+                'message' => 'Invalid request method',
+                'data' => json_encode($request),
             ]);
         }
     }
