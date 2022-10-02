@@ -105,10 +105,41 @@ class ScansController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $query = ScanModel::where('id', $id)->update([
-            'qrData' => $request->qrData,
-            'qrType' => $request->qrType
-        ]);
+        $actualData = ScanModel::find($id);
+
+        echo $actualData->qrType;
+
+        if ($request->isMethod('patch')) {
+            if ($request->qrData && !$request->qrType) {
+                $query = ScanModel::where('id', $id)->update([
+                    'qrData' => $request->qrData,
+                    'qrType' => $actualData->qrType
+                ]);
+            }
+            else if ($request->qrType && !$request->qrData) {
+                $query = ScanModel::where('id', $id)->update([
+                    'qrType' => $request->qrType,
+                    'qrData' => $actualData->qrData
+                ]);
+            }
+            else {
+                return response([
+                    'status' => 500,
+                    'message' => 'Data failed to update',
+                    'data' => json_encode($request),
+                ]);
+            }
+            $query = ScanModel::where('id', $id)->update([
+                'qrData' => $request->qrData,
+                'qrType' => $request->qrType
+            ]);
+        }
+        else {
+            $query = ScanModel::where('id', $id)->update([
+                'qrData' => $request->qrData,
+                'qrType' => $request->qrType
+            ]);
+        }
 
         if ($query) {
             return response([
