@@ -7,11 +7,11 @@ use App\Models\ScanModel;
 
 class ScansController extends Controller
 {
-    private $scan;
+    private $scans;
 
     public function _construct()
     {
-        $this->scan = new ScanModel();
+        $this->scans = new ScanModel();
     }
 
     /**
@@ -33,7 +33,7 @@ class ScansController extends Controller
      */
     public function create(Request $request)
     {
-        $query = $this->scan->create([
+        $query = $this->scans->create([
             'qrData' => $request->data,
             'qrType' => $request->type
         ]);
@@ -57,15 +57,24 @@ class ScansController extends Controller
         print($request);
 
         $query = ScanModel::create([
-            'qrData' => $request->data,
-            'qrType' => $request->type
+            'qrData' => $request->qrData,
+            'qrType' => $request->qrType
         ]);
 
         if ($query) {
-            return response()->success('Data saved successfully');
+            return response([
+                'status' => 200,
+                'message' => 'Data saved successfully',
+                'data' => $query . json_encode($request),
+            ]);
+
         }
         else {
-            return response()->failed('Data failed to save');
+            return response([
+                'status' => 500,
+                'message' => 'Data failed to save',
+                'data' => $query . json_encode($request),
+            ]);
         }
     }
 
@@ -90,7 +99,7 @@ class ScansController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $query = $this->scan->where('id', $id)->update([
+        $query = $this->scans->where('id', $id)->update([
             'qrData' => $request->data,
             'qrType' => $request->type
         ]);

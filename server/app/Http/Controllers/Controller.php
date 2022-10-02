@@ -15,24 +15,28 @@ class Controller extends BaseController
 
     private $scan;
 
-    public function _construct() {
+    public function _construct()
+    {
         $this->scan = new ScanModel();
     }
 
-    public function getScans() {
+    public function getScans()
+    {
         $scans = ScanModel::all();
 
         return response()->json($scans);
     }
 
-    public function postScan(Request $request) {
+    public function postScan(Request $request)
+    {
         $query = $this->scan->create([
             'data' => $request->data,
         ]);
 
         if ($query) {
             return response()->success('Data saved successfully');
-        } else {
+        }
+        else {
             return response()->failed('Data failed to save');
         }
     }
@@ -45,7 +49,8 @@ class Controller extends BaseController
 
         if ($query) {
             return response()->success('Data updated successfully');
-        } else {
+        }
+        else {
             return response()->failed('Data failed to update');
         }
     }
@@ -56,7 +61,8 @@ class Controller extends BaseController
 
         if ($query) {
             return response()->success('Data deleted successfully');
-        } else {
+        }
+        else {
             return response()->failed('Data failed to delete');
         }
     }
