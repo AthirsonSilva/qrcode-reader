@@ -10,6 +10,28 @@ export default function RestrictedPage() {
     const [headers, setHeaders] = React.useState([])
     const [loading, setLoading] = React.useState(true)
 
+    const rows = Object.values(data).map((item) => {
+        console.table(item)
+        return Object.values(item)
+    })
+
+    const values = Array()
+
+    for (let i = 0; i < rows.length; i++) {
+        rows[i].splice(0, 1)
+
+        for (let j = 0; j < rows[i].length; j++) {
+            values.push(rows[i][j])
+        }
+    }
+
+    console.table(values)
+    console.table([
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+    ])
+
     const getAllScans = async () => {
         await fetch(
             'http://127.0.0.1:8000/api/scan', {
@@ -27,14 +49,6 @@ export default function RestrictedPage() {
             })
 
             console.table(data)
-
-            data.map((scan: any) => {
-                scan.map((item: any) => {
-                    headers.push(item)
-
-                    console.table(item)
-                })
-            })
         })
         .catch((error) => console.error(error))
         .finally(() => setLoading(false));
@@ -42,7 +56,7 @@ export default function RestrictedPage() {
 
     React.useEffect(() => {
         getAllScans()
-        setHeaders(['ID', 'Data', 'Data de criação', 'Data de atualização'])
+        setHeaders(['ID', 'Data', 'Tipo', 'Criação', 'Atualização'])
     }, [])
     
     return (
@@ -53,9 +67,7 @@ export default function RestrictedPage() {
                         <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                             <Row data={headers} style={styles.headStyle} textStyle={styles.headerText}/>
                             <Rows data={[
-                                ['1', '2', '3', 'a'],
-                                ['a', 'b', 'c', '1'],
-                                ['1', '2', '3', 'a'],
+                                ['1', '2', '3', '4', '5'],
                             ]} 
                             textStyle={styles.rowText}/>
                         </Table>
