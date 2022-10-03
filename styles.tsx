@@ -56,9 +56,8 @@ const styles = StyleSheet.create({
       borderRadius: 10,
     },
     image: {
-      width: '60vw',
-      height: '25vh',
-      marginLeft: '20vw'
+      width: '75vw',
+      height: '35vh',
     }, 
     bgimage: {
       height: '100%',
@@ -84,6 +83,19 @@ const styles = StyleSheet.create({
     },
 
     rowText: {
+      textAlign: 'center',
+      margin: 10,
+    },
+
+    row: {
+      flexWrap: 'wrap',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+    },
+
+    lilText: {
+      fontSize: 16,
       textAlign: 'center',
       margin: 10,
     }

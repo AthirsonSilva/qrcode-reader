@@ -1,36 +1,12 @@
 import React from 'react';
-import { FlatList, Text, View, ActivityIndicator } from 'react-native';
-import { Table, TableWrapper, Row, Rows } from 'react-native-table-component';
+import { FlatList, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
 
 
 import styles from '../styles';
 
-export default function RestrictedPage() {
+export default function RestrictedPage({ navigation }: any) {
     const [data, setData] = React.useState([])
-    const [headers, setHeaders] = React.useState([])
     const [loading, setLoading] = React.useState(true)
-
-    const rows = Object.values(data).map((item) => {
-        console.table(item)
-        return Object.values(item)
-    })
-
-    const values = Array()
-
-    for (let i = 0; i < rows.length; i++) {
-        rows[i].splice(0, 1)
-
-        for (let j = 0; j < rows[i].length; j++) {
-            values.push(rows[i][j])
-        }
-    }
-
-    console.table(values)
-    console.table([
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
-    ])
 
     const getAllScans = async () => {
         await fetch(
@@ -54,24 +30,65 @@ export default function RestrictedPage() {
         .finally(() => setLoading(false));
     }
 
+    const renderItem = ({ item }: {item: any}) : JSX.Element => {
+        return (
+            <View style={[styles.item, styles.row, {
+                backgroundColor: item.ID === 'ID' ? '#f9c2ff' : '#f6f6f6',
+            }]}>
+                <View style={[styles.item, {
+                    backgroundColor: item.ID === 'ID' ? '#f9c2ff' : '#f6f6f6',
+                }]}>
+                    <Text style={[styles.listTitle, {
+                        fontSize: item.ID === 'ID' ? 28 : 24,
+                        fontWeight: item.ID === 'ID' ? 'bold' : 'normal',
+                        color: item.ID === 'ID' ? '#000' : '#000',
+                    }]}>{item.ID}</Text>
+                </View>
+                <View style={[styles.item, {
+                    backgroundColor: item.ID === 'ID' ? '#f9c2ff' : '#f6f6f6',
+                }]}>
+                    <Text style={[styles.listTitle, {
+                        fontSize: item.qrData === 'QR DATA' ? 28 : 24,
+                        fontWeight: item.qrData === 'QR DATA' ? 'bold' : 'normal',
+                        color: item.qrData === 'QR DATA' ? '#000' : '#000',
+                    }]}>{item.qrData}</Text>
+                </View>
+            </View>
+        );
+    }
+
     React.useEffect(() => {
         getAllScans()
-        setHeaders(['ID', 'Data', 'Tipo', 'Criação', 'Atualização'])
+        const headers = {
+            ID: 'ID',
+            qrData: 'QR DATA',
+            qrType: 'QR TYPE',
+            created_at: 'CREATED AT',
+            updated_at: 'UPDATED AT',
+        }
+
+        data.push(headers)
     }, [])
     
     return (
         <View style={[ styles.container, { backgroundColor: '#fff' } ]}>
              {loading ? <ActivityIndicator/> : (
                 <View style={styles.container}>
-                    <TableWrapper style={styles.container}>
-                        <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                            <Row data={headers} style={styles.headStyle} textStyle={styles.headerText}/>
-                            <Rows data={[
-                                ['1', '2', '3', '4', '5'],
-                            ]} 
-                            textStyle={styles.rowText}/>
-                        </Table>
-                    </TableWrapper>
+                    <FlatList
+                        data={data}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.ID}
+                    />
+        
+                    <View style={[ styles.row, { marginBottom: 15 } ]}>
+                        <TouchableOpacity style={[styles.button]} onPress={() => navigation.navigate('Home')}>
+                            <Text style={[styles.listTitle]}>    Home    </Text>
+                        </TouchableOpacity> 
+                        <TouchableOpacity style={[styles.button]} onPress={() => navigation.navigate('Scan')}>
+                            <Text style={[styles.listTitle]}>    Scan    </Text>
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
                 )}   
         </View>

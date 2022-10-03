@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, ActivityIndicator } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from '../styles';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import axios from 'axios';
 const App = () => {
 	const [hasPermission, setHasPermission] = React.useState<null>(null);
 	const [scanned, setScanned] = React.useState<boolean>(false);
+	const [loading, setLoading] = React.useState<boolean>(false);
 	const [n1, setN1] = React.useState<string>('');
 	const [n2, setN2] = React.useState<string>('');
 
@@ -16,7 +17,7 @@ const App = () => {
 			setHasPermission(status === 'granted');
 		};
 
-		getScans();
+		getAllScans();
 		getBarCodeScannerPermissions();
 	}, []);
 
@@ -32,20 +33,23 @@ const App = () => {
 			.catch((err) => alert('Server error: ' + err));
 	};
 
-	function getScans() {
-		axios({
-			method: 'get',
-			url: 'http://127.0.0.1:8000/api/scan',
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/json',
-			},
-		})
-			.then((response) => {
-				console.table(response.data);
-			})
-			.catch((err) => alert('Server error: ' + err));
-	}
+	const getAllScans = async () => {
+        await fetch(
+            'http://127.0.0.1:8000/api/scan', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            }
+        )
+        .then((response) => response.json())
+        .then((json) => {
+            console.table(json.scans)
+        })
+        .catch((error) => console.error(error))
+        .finally(() => setLoading(false));
+    }
 
 	const validateVariables = (data: string) => {
 		if (data === undefined) {
@@ -76,7 +80,7 @@ const App = () => {
 			`Bar code with type ${type} and data ${data} has been scanned!`
 		);
 
-		getScans();
+		getAllScans();
 		// sendMysql({ type: type,  data: data });
 		// validateVariables({ data: data });
 	};
