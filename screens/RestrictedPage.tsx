@@ -1,12 +1,39 @@
 import React from 'react';
 import { FlatList, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
-
+import { SearchBar } from "react-native-elements";
 
 import styles from '../styles';
 
 export default function RestrictedPage({ navigation }: any) {
-    const [data, setData] = React.useState([])
-    const [loading, setLoading] = React.useState(true)
+    const [data, setData] = React.useState<never[]>([])
+    const [filtered, setFiltered] = React.useState<never[]>([])
+    const [search, setSearch] = React.useState<string>('')
+    const [loading, setLoading] = React.useState<boolean>(true)
+
+    const searchFilterFunction = (text: string) => {
+		// Check if searched text is not blank
+		if (text) {
+		  // Inserted text is not blank
+		  // Filter the masterDataSource and update FilteredDataSource
+		  const newData = data.filter(item => {
+			// Applying filter for the inserted text in search bar
+			const itemData = item.qrData
+			  ? item.qrData.toUpperCase()
+			  : ''.toUpperCase();
+
+			const textData = text.toUpperCase();
+			
+			return itemData.indexOf(textData) > -1;
+		  });
+		  setFiltered(newData);
+		  setSearch(text);
+		} else {
+		  // Inserted text is blank
+		  // Update FilteredDataSource with masterDataSource
+		  setFiltered(data);
+		  setSearch(text);
+		}
+	  };
 
     const getAllScans = async () => {
         await fetch(
@@ -74,12 +101,21 @@ export default function RestrictedPage({ navigation }: any) {
         <View style={[ styles.container, { backgroundColor: '#fff' } ]}>
              {loading ? <ActivityIndicator/> : (
                 <View style={styles.container}>
-                    <FlatList
-                        data={data}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.ID}
+                    <SearchBar
+                        placeholder="Pesquisar QRCodes..."
+                        lightTheme
+                        platform='android'
+                        round
+                        value={search}
+                        onChangeText={(text) => searchFilterFunction(text)}
+                        autoCorrect={false}
+                        blurOnSubmit={true}
+                        autoFocus={true}
+                        style={{
+                            width: '72vw',
+                        }}
                     />
-        
+
                     <View style={[ styles.row, { marginBottom: 15 } ]}>
                         <TouchableOpacity style={[styles.button]} onPress={() => navigation.navigate('Home')}>
                             <Text style={[styles.listTitle]}>    Home    </Text>
@@ -89,6 +125,13 @@ export default function RestrictedPage({ navigation }: any) {
                         </TouchableOpacity>
                     </View>
 
+                    <FlatList
+                        data={filtered}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.ID}
+                        scrollEnabled={true}
+                        bounces={true}
+                    />
                 </View>
                 )}   
         </View>

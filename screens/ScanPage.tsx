@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, ActivityIndicator } from 'react-native';
+import { Text, View, StyleSheet, Button, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from '../styles';
 import axios from 'axios';
 
-const App = () => {
+const Scans = ({ navigation }: any) => {
 	const [hasPermission, setHasPermission] = React.useState<null>(null);
 	const [scanned, setScanned] = React.useState<boolean>(false);
 	const [loading, setLoading] = React.useState<boolean>(false);
@@ -99,13 +99,24 @@ const App = () => {
 				style={StyleSheet.absoluteFillObject}
 			/>
 			{scanned && (
-				<Button
-					title={'Tap to Scan Again'}
+				<View style={styles.row}>
+				<TouchableOpacity
 					onPress={() => setScanned(false)}
-				/>
+					style={styles.button}
+				>
+					<Text style={styles.listTitle}>Scan Again</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={() => navigation.navigate('Home')}
+					style={styles.button}
+				>
+					<Text style={styles.listTitle}>Go home</Text>
+				</TouchableOpacity>
+				</View>
 			)}
 		</View>
 	);
 };
 
-export default App;
+export default Scans;
