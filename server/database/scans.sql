@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05-Out-2022 às 21:52
+-- Tempo de geração: 05-Out-2022 às 21:55
 -- Versão do servidor: 10.4.22-MariaDB
 -- versão do PHP: 8.0.13
 
@@ -50,7 +50,8 @@ INSERT INTO `scans` (`ID`, `qrData`, `qrType`, `created_at`, `updated_at`) VALUE
 -- Índices para tabela `scans`
 --
 ALTER TABLE `scans`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `qrData` (`qrData`);
 
 --
 -- AUTO_INCREMENT de tabelas despejadas
@@ -60,7 +61,7 @@ ALTER TABLE `scans`
 -- AUTO_INCREMENT de tabela `scans`
 --
 ALTER TABLE `scans`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
