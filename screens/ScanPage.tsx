@@ -1,5 +1,12 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, ActivityIndicator, TouchableOpacity } from 'react-native';
+import {
+	Text,
+	View,
+	StyleSheet,
+	Button,
+	ActivityIndicator,
+	TouchableOpacity,
+} from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from '../styles';
 import axios from 'axios';
@@ -26,7 +33,7 @@ const Scans = ({ navigation }: any) => {
 			method: 'post',
 			url: `http://127.0.0.1:8000/api/scan`,
 			data: {
-				data: JSON.stringify({ data }),
+				data: JSON.stringify({ data, type }),
 			},
 		})
 			.then((response) => alert('Data sent: ' + response.data))
@@ -34,22 +41,20 @@ const Scans = ({ navigation }: any) => {
 	};
 
 	const getAllScans = async () => {
-        await fetch(
-            'http://127.0.0.1:8000/api/scan', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-            }
-        )
-        .then((response) => response.json())
-        .then((json) => {
-            console.table(json.scans)
-        })
-        .catch((error) => console.error(error))
-        .finally(() => setLoading(false));
-    }
+		await fetch('http://127.0.0.1:8000/api/scan', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json',
+			},
+		})
+			.then((response) => response.json())
+			.then((json) => {
+				console.table(json.scans);
+			})
+			.catch((error) => console.error(error))
+			.finally(() => setLoading(false));
+	};
 
 	const validateVariables = (data: string) => {
 		if (data === undefined) {
@@ -81,12 +86,11 @@ const Scans = ({ navigation }: any) => {
 		);
 
 		getAllScans();
-		// sendMysql({ type: type,  data: data });
-		// validateVariables({ data: data });
+		postScan(type, data);
 	};
 
 	if (hasPermission === null) {
-		return <Text>Requesting for camera permission</Text>
+		return <Text>Requesting for camera permission</Text>;
 	}
 	if (hasPermission === false) {
 		return <Text>No access to camera</Text>;
@@ -100,19 +104,19 @@ const Scans = ({ navigation }: any) => {
 			/>
 			{scanned && (
 				<View style={styles.row}>
-				<TouchableOpacity
-					onPress={() => setScanned(false)}
-					style={styles.button}
-				>
-					<Text style={styles.listTitle}>Scan Again</Text>
-				</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => setScanned(false)}
+						style={styles.button}
+					>
+						<Text style={styles.listTitle}>Scan Again</Text>
+					</TouchableOpacity>
 
-				<TouchableOpacity
-					onPress={() => navigation.navigate('Home')}
-					style={styles.button}
-				>
-					<Text style={styles.listTitle}>Go home</Text>
-				</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => navigation.navigate('Home')}
+						style={styles.button}
+					>
+						<Text style={styles.listTitle}>Go home</Text>
+					</TouchableOpacity>
 				</View>
 			)}
 		</View>

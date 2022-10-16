@@ -1,104 +1,104 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+	container: {
+		flex: 1,
+		backgroundColor: '#fff',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 
-    title:{
-      color:'#000',
-      fontSize:25,
-      textAlign:'center',
-      marginTop:25,
-      marginBottom:10
-    },
+	title: {
+		color: '#000',
+		fontSize: 25,
+		textAlign: 'center',
+		marginTop: 25,
+		marginBottom: 10,
+	},
 
-    listTitle: {
-      fontSize: 24,
-      textAlign: 'center',
-    },
-  
-    textInputs:{
-      borderWidth:1,
-      borderColor:'#000',
-      color:'#000',
-      borderRadius:40,
-      paddingLeft: 25,
-      height:60    
-    },
-  
-    answer:{
-      color:'#000',
-      fontSize:25,
-      textAlign:'center',
-      marginTop:30
-    },
-    lilMargin: {
-      margin: 15
-    },
-    button: {
-      alignItems: "center",
-      backgroundColor: "#ddd",
-      padding: 10,
-      marginVertical: 10,
-      marginHorizontal: 15,
-      borderRadius: 10
-    },
-    item: {
-      backgroundColor: '#ddd',
-      padding: 5,
-      paddingVertical: 10,
-      marginVertical: 5,
-      marginHorizontal: 15,
-      borderRadius: 10,
-    },
-    image: {
-      width: '75vw',
-      height: '35vh',
-    }, 
-    bgimage: {
-      height: '100%',
-      width: '100%'
-    },
+	listTitle: {
+		fontSize: 24,
+		textAlign: 'center',
+	},
 
-    headerText: {
-      fontSize: 16,
-      textAlign: 'center',
-      margin: 10,
-      fontWeight: 'bold',
-    },
+	textInputs: {
+		borderWidth: 1,
+		borderColor: '#000',
+		color: '#000',
+		borderRadius: 40,
+		paddingLeft: 25,
+		height: 60,
+	},
 
-    headStyle: {
-      height: 50,
-      backgroundColor: '#f1f8ff',
-      alignContent: 'center',
-    },
-    cellStyle: {
-      margin: 10,
-      textAlign: 'center',
-      height: 40,
-    },
+	answer: {
+		color: '#000',
+		fontSize: 25,
+		textAlign: 'center',
+		marginTop: 30,
+	},
+	lilMargin: {
+		margin: 15,
+	},
+	button: {
+		alignItems: 'center',
+		backgroundColor: '#ddd',
+		padding: 10,
+		marginVertical: 10,
+		marginHorizontal: 15,
+		borderRadius: 10,
+	},
+	item: {
+		backgroundColor: '#ddd',
+		padding: 5,
+		paddingVertical: 10,
+		marginVertical: 5,
+		marginHorizontal: 15,
+		borderRadius: 10,
+	},
+	image: {
+		width: '75%',
+		height: 235,
+	},
+	bgimage: {
+		height: '100%',
+		width: '100%',
+	},
 
-    rowText: {
-      textAlign: 'center',
-      margin: 10,
-    },
+	headerText: {
+		fontSize: 16,
+		textAlign: 'center',
+		margin: 10,
+		fontWeight: 'bold',
+	},
 
-    row: {
-      flexWrap: 'wrap',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'flex-start',
-    },
+	headStyle: {
+		height: 50,
+		backgroundColor: '#f1f8ff',
+		alignContent: 'center',
+	},
+	cellStyle: {
+		margin: 10,
+		textAlign: 'center',
+		height: 40,
+	},
 
-    lilText: {
-      fontSize: 16,
-      textAlign: 'center',
-      margin: 10,
-    }
+	rowText: {
+		textAlign: 'center',
+		margin: 10,
+	},
+
+	row: {
+		flexWrap: 'wrap',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'flex-start',
+	},
+
+	lilText: {
+		fontSize: 16,
+		textAlign: 'center',
+		margin: 10,
+	},
 });
 
-export default styles
+export default styles;
