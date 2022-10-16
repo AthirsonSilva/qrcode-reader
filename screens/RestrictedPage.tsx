@@ -23,8 +23,8 @@ export default function RestrictedPage({ navigation }: any) {
 			// Filter the masterDataSource and update FilteredDataSource
 			const newData = data.filter((item) => {
 				// Applying filter for the inserted text in search bar
-				const itemData = item.qrData
-					? item.qrData.toUpperCase()
+				const itemData = item.data
+					? item.data.toUpperCase()
 					: ''.toUpperCase();
 
 				const textData = text.toUpperCase();
@@ -69,7 +69,7 @@ export default function RestrictedPage({ navigation }: any) {
 					styles.row,
 					{
 						backgroundColor:
-							item.ID === 'ID' ? '#f9c2ff' : '#f6f6f6',
+							item.id === 'ID' ? '#f9c2ff' : '#f6f6f6',
 					},
 				]}
 			>
@@ -78,7 +78,7 @@ export default function RestrictedPage({ navigation }: any) {
 						styles.item,
 						{
 							backgroundColor:
-								item.ID === 'ID' ? '#f9c2ff' : '#f6f6f6',
+								item.id === 'ID' ? '#f9c2ff' : '#f6f6f6',
 						},
 					]}
 				>
@@ -86,14 +86,14 @@ export default function RestrictedPage({ navigation }: any) {
 						style={[
 							styles.listTitle,
 							{
-								fontSize: item.ID === 'ID' ? 28 : 24,
+								fontSize: item.id === 'ID' ? 28 : 24,
 								fontWeight:
-									item.ID === 'ID' ? 'bold' : 'normal',
-								color: item.ID === 'ID' ? '#000' : '#000',
+									item.id === 'ID' ? 'bold' : 'normal',
+								color: item.id === 'ID' ? '#000' : '#000',
 							},
 						]}
 					>
-						{item.ID}
+						{item.id}
 					</Text>
 				</View>
 				<View
@@ -101,7 +101,7 @@ export default function RestrictedPage({ navigation }: any) {
 						styles.item,
 						{
 							backgroundColor:
-								item.ID === 'ID' ? '#f9c2ff' : '#f6f6f6',
+								item.id === 'ID' ? '#f9c2ff' : '#f6f6f6',
 						},
 					]}
 				>
@@ -109,17 +109,14 @@ export default function RestrictedPage({ navigation }: any) {
 						style={[
 							styles.listTitle,
 							{
-								fontSize: item.qrData === 'QR DATA' ? 28 : 24,
+								fontSize: item.data === 'DATA' ? 28 : 24,
 								fontWeight:
-									item.qrData === 'QR DATA'
-										? 'bold'
-										: 'normal',
-								color:
-									item.qrData === 'QR DATA' ? '#000' : '#000',
+									item.data === 'DATA' ? 'bold' : 'normal',
+								color: item.data === 'DATA' ? '#000' : '#000',
 							},
 						]}
 					>
-						{item.qrData}
+						{item.data}
 					</Text>
 				</View>
 			</View>
@@ -129,9 +126,9 @@ export default function RestrictedPage({ navigation }: any) {
 	React.useEffect(() => {
 		getAllScans();
 		const headers = {
-			ID: 'ID',
-			qrData: 'QR DATA',
-			qrType: 'QR TYPE',
+			id: 'ID',
+			data: 'DATA',
+			qrType: 'TYPE',
 			created_at: 'CREATED AT',
 			updated_at: 'UPDATED AT',
 		};
@@ -178,7 +175,7 @@ export default function RestrictedPage({ navigation }: any) {
 					<FlatList
 						data={filtered}
 						renderItem={renderItem}
-						keyExtractor={(item) => item.ID}
+						keyExtractor={(item) => item.id}
 						scrollEnabled={true}
 						bounces={true}
 					/>

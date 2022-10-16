@@ -37,14 +37,14 @@ class ScansController extends Controller
     public function create(Request $request)
     {
         $query = $this->scans->create([
-            'qrData' => $request->data,
-            'qrType' => $request->type
+            'data' => $request->data,
+            'type' => $request->type,
+            'name' => $request->name
         ]);
 
         if ($query) {
             return response()->success('Data saved successfully');
-        }
-        else {
+        } else {
             return response()->failed('Data failed to save');
         }
     }
@@ -60,8 +60,9 @@ class ScansController extends Controller
         print($request);
 
         $query = ScanModel::create([
-            'qrData' => $request->qrData,
-            'qrType' => $request->qrType
+            'data' => $request->data,
+            'type' => $request->type,
+            'name' => $request->name
         ]);
 
         if ($query) {
@@ -70,9 +71,7 @@ class ScansController extends Controller
                 'message' => 'Data saved successfully',
                 'data' => $query . json_encode($request),
             ]);
-
-        }
-        else {
+        } else {
             return response([
                 'status' => 500,
                 'message' => 'Data failed to save',
@@ -121,13 +120,13 @@ class ScansController extends Controller
     {
         $actualData = ScanModel::find($id);
 
-        echo $actualData->qrType;
+        echo $actualData->type;
 
         if ($request->isMethod('patch')) {
-            if ($request->qrData && !$request->qrType) {
+            if ($request->data && !$request->type) {
                 $query = ScanModel::where('id', $id)->update([
-                    'qrData' => $request->qrData,
-                    'qrType' => $actualData->qrType
+                    'data' => $request->data,
+                    'type' => $actualData->type
                 ]);
 
                 return response([
@@ -135,14 +134,12 @@ class ScansController extends Controller
                     'message' => 'Data updated successfully',
                     'data' => $query . json_encode($request),
                 ]);
-            }
-            else if ($request->qrType && !$request->qrData) {
+            } else if ($request->type && !$request->data) {
                 $query = ScanModel::where('id', $id)->update([
-                    'qrType' => $request->qrType,
-                    'qrData' => $actualData->qrData
+                    'type' => $request->type,
+                    'data' => $actualData->data
                 ]);
-            }
-            else {
+            } else {
                 return response([
                     'status' => 500,
                     'message' => 'Data failed to update',
@@ -150,8 +147,8 @@ class ScansController extends Controller
                 ]);
             }
             $query = ScanModel::where('id', $id)->update([
-                'qrData' => $request->qrData,
-                'qrType' => $request->qrType
+                'data' => $request->data,
+                'type' => $request->type
             ]);
 
             return response([
@@ -159,11 +156,10 @@ class ScansController extends Controller
                 'message' => 'Data updated successfully',
                 'data' => $query . json_encode($request),
             ]);
-        }
-        else if ($request->isMethod('put')) {
+        } else if ($request->isMethod('put')) {
             $query = ScanModel::where('id', $id)->update([
-                'qrData' => $request->qrData,
-                'qrType' => $request->qrType
+                'data' => $request->data,
+                'type' => $request->type
             ]);
 
             return response([
@@ -171,8 +167,7 @@ class ScansController extends Controller
                 'message' => 'Data updated successfully',
                 'data' => $query . json_encode($request),
             ]);
-        }
-        else {
+        } else {
             return response([
                 'status' => 500,
                 'message' => 'Invalid request method',
@@ -198,8 +193,7 @@ class ScansController extends Controller
                 'message' => 'Data deleted successfully',
                 'data' => $query,
             ]);
-        }
-        else {
+        } else {
             return response([
                 'status' => 500,
                 'message' => 'Data failed to delete',

@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class scan extends Seeder
+class scans extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class scan extends Seeder
      */
     public function run()
     {
-        DB::table('scan')->insert(
+        DB::table('scans')->insert(
             array(
                 [
                     'data' => 'https://www.example1.com',

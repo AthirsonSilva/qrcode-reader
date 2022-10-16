@@ -33,11 +33,15 @@ const Scans = ({ navigation }: any) => {
 			method: 'post',
 			url: `http://127.0.0.1:8000/api/scan`,
 			data: {
-				data: JSON.stringify({ data, type }),
+				data: JSON.stringify({
+					type: type,
+					data: data,
+					name: null,
+				}),
 			},
 		})
 			.then((response) => alert('Data sent: ' + response.data))
-			.catch((err) => alert('Server error: ' + err));
+			.catch((err) => alert('Server error: ' + err.message));
 	};
 
 	const getAllScans = async () => {

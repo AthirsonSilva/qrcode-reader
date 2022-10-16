@@ -12,7 +12,8 @@ class ScanModel extends Model
     protected $table = 'scans';
 
     protected $fillable = [
-        'qrData',
-        'qrType'
+        'data',
+        'type',
+        'name'
     ];
 }
