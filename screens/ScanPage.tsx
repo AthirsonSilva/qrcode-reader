@@ -1,103 +1,83 @@
-import React from 'react';
-import {
-	Text,
-	View,
-	StyleSheet,
-	Button,
-	ActivityIndicator,
-	TouchableOpacity,
-} from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import styles from '../styles';
-import axios from 'axios';
+import { BarCodeScanner } from 'expo-barcode-scanner'
+import React, { useEffect, useState } from 'react'
+import { Button, StyleSheet, Text, View } from 'react-native'
+import styles from '../styles'
 
-const Scans = ({ navigation }: any) => {
-	const [hasPermission, setHasPermission] = React.useState<null>(null);
-	const [scanned, setScanned] = React.useState<boolean>(false);
-	const [loading, setLoading] = React.useState<boolean>(false);
-	const [n1, setN1] = React.useState<string>('');
-	const [n2, setN2] = React.useState<string>('');
+const App = (): JSX.Element => {
+	const [hasPermission, setHasPermission] = useState<any>(null)
+	const [scanned, setScanned] = useState<boolean>(false)
+	const [data, setData] = useState<string>('')
+	const [type, setType] = useState<number>(0)
 
-	React.useEffect(() => {
+	useEffect((): void => {
 		const getBarCodeScannerPermissions = async () => {
-			const { status } = await BarCodeScanner.requestPermissionsAsync();
-			setHasPermission(status === 'granted');
-		};
+			const { status } = await BarCodeScanner.requestPermissionsAsync()
+			setHasPermission(status === 'granted')
+		}
 
-		getAllScans();
-		getBarCodeScannerPermissions();
-	}, []);
+		getBarCodeScannerPermissions()
+	}, [])
 
-	const postScan = async (type: string, data: string) => {
-		await axios({
+	const sendMysql = async ({
+		type,
+		data,
+	}: {
+		type: number
+		data: string
+	}): Promise<void> => {
+		const url = `http://localhost/api/scans`
+
+		await fetch(url, {
 			method: 'post',
-			url: `http://127.0.0.1:8000/api/scan`,
-			data: {
-				data: JSON.stringify({
-					type: type,
-					data: data,
-					name: null,
-				}),
-			},
-		})
-			.then((response) => alert('Data sent: ' + response.data))
-			.catch((err) => alert('Server error: ' + err.message));
-	};
-
-	const getAllScans = async () => {
-		await fetch('http://127.0.0.1:8000/api/scan', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/json',
-			},
+			body: JSON.stringify({ type, data }),
 		})
 			.then((response) => response.json())
-			.then((json) => {
-				console.table(json.scans);
+			.then((response) => alert(`Response: ${response}`))
+			.catch((error) =>
+				alert(
+					`Server erroror: ${error}\nData scanner: ${data} - ${type}`
+				)
+			)
+			.finally(() => {
+				afterScan({
+					type: 0,
+					data: '',
+				})
 			})
-			.catch((error) => console.error(error))
-			.finally(() => setLoading(false));
-	};
+	}
 
-	const validateVariables = (data: string) => {
-		if (data === undefined) {
-			alert('Please scan a valida QR code');
-		} else {
-			if (!n1) {
-				alert('QR code scanned with success');
-				console.log('n1 before: ' + n1);
-				setN1(data);
-				console.log('n1 after: ' + n1);
-			} else {
-				if (!n2) {
-					alert('QR code scanned with success');
-					console.log('n2 before: ' + n2);
-					setN2(data);
-					console.log('n2 after: ' + n2);
-				} else {
-					alert('QR code already scanned');
-				}
-			}
-			console.table({ n1, n2 });
-		}
-	};
+	const afterScan = async ({
+		type,
+		data,
+	}: {
+		type: number
+		data: string
+	}): Promise<void> => {
+		setScanned(true)
+		setData(data)
+		setType(type)
+	}
 
-	const handleBarCodeScanned = (type: string, data: string) => {
-		setScanned(true);
+	const handleBarCodeScanned = ({
+		type,
+		data,
+	}: {
+		type: number
+		data: string
+	}): void => {
+		setScanned(true)
 		console.log(
 			`Bar code with type ${type} and data ${data} has been scanned!`
-		);
+		)
 
-		getAllScans();
-		postScan(type, data);
-	};
+		sendMysql({ type: type, data: data })
+	}
 
 	if (hasPermission === null) {
-		return <Text>Requesting for camera permission</Text>;
+		return <Text>Requesting for camera permission</Text>
 	}
 	if (hasPermission === false) {
-		return <Text>No access to camera</Text>;
+		return <Text>No access to camera</Text>
 	}
 
 	return (
@@ -107,24 +87,13 @@ const Scans = ({ navigation }: any) => {
 				style={StyleSheet.absoluteFillObject}
 			/>
 			{scanned && (
-				<View style={styles.row}>
-					<TouchableOpacity
-						onPress={() => setScanned(false)}
-						style={styles.button}
-					>
-						<Text style={styles.listTitle}>Scan Again</Text>
-					</TouchableOpacity>
-
-					<TouchableOpacity
-						onPress={() => navigation.navigate('Home')}
-						style={styles.button}
-					>
-						<Text style={styles.listTitle}>Go home</Text>
-					</TouchableOpacity>
-				</View>
+				<Button
+					title={'Tap to Scan Again'}
+					onPress={() => setScanned(false)}
+				/>
 			)}
 		</View>
-	);
-};
+	)
+}
 
-export default Scans;
+export default App

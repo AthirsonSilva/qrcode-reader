@@ -57,26 +57,36 @@ class ScansController extends Controller
      */
     public function store(Request $request)
     {
-        print($request);
+        try {
 
-        $query = ScanModel::create([
-            'data' => $request->data,
-            'type' => $request->type,
-            'name' => $request->name
-        ]);
+            $query = ScanModel::create([
+                'data' => $request->data,
+                'type' => $request->type,
+                'name' => $request->name
+            ]);
 
-        if ($query) {
-            return response([
-                'status' => 200,
-                'message' => 'Data saved successfully',
-                'data' => $query . json_encode($request),
-            ]);
-        } else {
-            return response([
-                'status' => 500,
-                'message' => 'Data failed to save',
-                'data' => $query . json_encode($request),
-            ]);
+            if ($query) {
+                return response([
+                    'status' => 200,
+                    'message' => 'Data saved successfully',
+                    'data' => $query . json_encode($request),
+                ]);
+            } else {
+
+                return response([
+                    'status' => 500,
+                    'message' => 'Data failed to save',
+                    'data' => $query . json_encode($request),
+                ]);
+            }
+        } catch (\Exception $e) {
+            if ($e instanceof \Illuminate\Database\QueryException && $e->getCode() == 23000) {
+                return response([
+                    'status' => 500,
+                    'message' => 'O QRCode já existe',
+                    'data' => $e->getMessage(),
+                ]);
+            }
         }
     }
 
